@@ -1,0 +1,32 @@
+[Unit]
+Description=Memex Knowledge Base Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/memex serve
+Restart=on-failure
+RestartSec=5
+
+# Directories (systemd creates these automatically)
+RuntimeDirectory=memex
+StateDirectory=memex
+
+# Security
+AmbientCapabilities=CAP_SYS_ADMIN
+NoNewPrivileges=no
+CapabilityBoundingSet=CAP_SYS_ADMIN
+ProtectSystem=strict
+ReadWritePaths=/var/lib/memex /run/memex /workspace
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+# Environment
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,1 @@
+cmd_Release/peercred.node := ln -f "Release/obj.target/peercred.node" "Release/peercred.node" 2>/dev/null || (rm -rf "Release/peercred.node" && cp -af "Release/obj.target/peercred.node" "Release/peercred.node")
