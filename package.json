@@ -1,5 +1,5 @@
 {
-  "name": "memex",
+  "name": "@wastedcode/memex",
   "version": "0.1.0",
   "description": "Isolated, queued claude -p runtime for persistent knowledge bases",
   "type": "module",
@@ -14,7 +14,28 @@
     "build": "tsc",
     "bundle": "node esbuild.config.js",
     "dev": "tsc --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build && npm run bundle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wastedcode/memex.git"
+  },
+  "homepage": "https://github.com/wastedcode/memex#readme",
+  "bugs": {
+    "url": "https://github.com/wastedcode/memex/issues"
+  },
+  "keywords": [
+    "memex",
+    "wiki",
+    "knowledge-base",
+    "claude",
+    "ai",
+    "daemon",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT",
   "files": [

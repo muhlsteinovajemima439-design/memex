@@ -1,5 +1,7 @@
 # Architecture
 
+Memex wraps `claude -p` into a daemon that gives each wiki isolated filesystem access, queued job processing, and per-wiki configuration. This document covers the internals — how the pieces fit together and why they're designed this way.
+
 ## Design principles
 
 1. **Keep the CLI.** Don't replace `claude -p` with raw API calls. The file tools are the product.

@@ -1,6 +1,6 @@
 # Prompt Design
 
-The prompt is the product. Every sentence in the system prompt is a product decision. Edit with the same care as a core algorithm — test changes, review results, document iterations.
+The prompts are what make Memex a disciplined wiki curator rather than a generic chatbot. Every sentence in the system prompt is a product decision — it shapes whether the LLM creates useful cross-references, maintains the index, notices contradictions, or lets things drift. Edit with the same care as a core algorithm.
 
 ## Prompt architecture
 

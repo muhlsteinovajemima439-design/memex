@@ -1,5 +1,7 @@
 # Operations Guide
 
+Everything you need to install, run, and maintain Memex in practice — from first install to backup and debugging.
+
 ## Installation
 
 ### From npm
