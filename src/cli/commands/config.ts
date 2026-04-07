@@ -9,11 +9,11 @@ export const configCommand = new Command('config')
   .description('Configure a wiki')
   .argument('<wikiId>', 'Wiki to configure')
   .option('--edit', 'Open .claude.md in $EDITOR')
-  .option('--set-key', 'Set the API key for this wiki')
+  .option('--set-token', 'Set an OAuth token for this wiki (from `claude setup-token`)')
   .option('--model <model>', 'Set the default model (e.g., sonnet, opus, haiku)')
   .option('--allowed-tools <tools>', 'Set allowed tools (comma-separated, e.g., WebSearch,WebFetch)')
   .option('--list-tools', 'Show available tools and current configuration')
-  .action(async (wikiId: string, opts: { edit?: boolean; setKey?: boolean; model?: string; allowedTools?: string; listTools?: boolean }) => {
+  .action(async (wikiId: string, opts: { edit?: boolean; setToken?: boolean; model?: string; allowedTools?: string; listTools?: boolean }) => {
     const client = new MemexClient();
 
     // Verify wiki exists
@@ -36,14 +36,19 @@ export const configCommand = new Command('config')
       return;
     }
 
-    if (opts.setKey) {
-      const key = await promptSecret('API key: ');
-      const resp = await client.setApiKey(wikiId, key);
+    if (opts.setToken) {
+      const token = await promptSecret('OAuth token (from `claude setup-token`): ');
+      if (!token.startsWith('sk-ant-oat01-')) {
+        console.error(`Error: Token must start with 'sk-ant-oat01-'.`);
+        console.error(`\nGenerate one by running: claude setup-token`);
+        process.exit(1);
+      }
+      const resp = await client.setWikiToken(wikiId, token);
       if (!resp.ok) {
         console.error(`Error: ${resp.error}`);
         process.exit(1);
       }
-      console.log(`API key set for '${wikiId}'`);
+      console.log(`OAuth token set for '${wikiId}'`);
       return;
     }
 

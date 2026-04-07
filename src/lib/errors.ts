@@ -52,8 +52,10 @@ export class NoCredentialsError extends MemexError {
     super(
       `No credentials configured for wiki '${wikiId}'.\n` +
       'Set credentials with:\n' +
-      `  memex login ${wikiId}          (OAuth)\n` +
-      `  memex config ${wikiId} --set-key  (API key)`,
+      `  memex setup-token <token>               (global, all wikis)\n` +
+      `  memex login ${wikiId} --token <token>    (per-wiki)\n` +
+      `  memex login ${wikiId}                    (copy ~/.claude credentials)\n` +
+      '\nGenerate a token by running: claude setup-token',
       'NO_CREDENTIALS',
       400
     );

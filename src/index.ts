@@ -13,6 +13,7 @@ import { logsCommand } from './cli/commands/logs.js';
 import { listCommand } from './cli/commands/list.js';
 import { chownCommand } from './cli/commands/chown.js';
 import { statusCommand } from './cli/commands/status.js';
+import { setupTokenCommand } from './cli/commands/setup-token.js';
 
 const program = new Command();
 
@@ -33,6 +34,7 @@ program.addCommand(logsCommand);
 program.addCommand(listCommand);
 program.addCommand(chownCommand);
 program.addCommand(statusCommand);
+program.addCommand(setupTokenCommand);
 
 program.parseAsync().catch((err) => {
   console.error(err.message ?? err);

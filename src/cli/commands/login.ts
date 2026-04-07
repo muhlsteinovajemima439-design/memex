@@ -10,8 +10,8 @@ export const loginCommand = new Command('login')
   .description('Copy Claude credentials into a wiki')
   .argument('<wikiId>', 'Wiki to authenticate')
   .option('--credentials <path>', 'Path to .credentials.json', DEFAULT_CREDS_PATH)
-  .option('--api-key <key>', 'Use an API key instead of OAuth credentials')
-  .action(async (wikiId: string, opts: { credentials: string; apiKey?: string }) => {
+  .option('--token <token>', 'Use an OAuth token from `claude setup-token`')
+  .action(async (wikiId: string, opts: { credentials: string; token?: string }) => {
     const client = new MemexClient();
 
     const wikiResp = await client.getWiki(wikiId);
@@ -20,14 +20,20 @@ export const loginCommand = new Command('login')
       process.exit(1);
     }
 
-    // API key mode
-    if (opts.apiKey) {
-      const resp = await client.setApiKey(wikiId, opts.apiKey);
+    // OAuth token mode
+    if (opts.token) {
+      if (!opts.token.startsWith('sk-ant-oat01-')) {
+        console.error(`Error: Token must start with 'sk-ant-oat01-'.`);
+        console.error(`\nGenerate one by running: claude setup-token`);
+        process.exit(1);
+      }
+
+      const resp = await client.setWikiToken(wikiId, opts.token);
       if (!resp.ok) {
         console.error(`Error: ${resp.error}`);
         process.exit(1);
       }
-      console.log(`API key stored for wiki '${wikiId}'.`);
+      console.log(`OAuth token stored for wiki '${wikiId}'.`);
       return;
     }
 
@@ -35,7 +41,10 @@ export const loginCommand = new Command('login')
     const credsPath = opts.credentials;
     if (!existsSync(credsPath)) {
       console.error(`Error: Credentials file not found: ${credsPath}`);
-      console.error(`\nRun 'claude auth login' first, or pass --credentials <path>`);
+      console.error(`\nOptions:`);
+      console.error(`  1. Run 'claude auth login' first, then re-run this command`);
+      console.error(`  2. Run 'claude setup-token' and use: memex login ${wikiId} --token <token>`);
+      console.error(`  3. Set globally: memex setup-token <token>`);
       process.exit(1);
     }
 

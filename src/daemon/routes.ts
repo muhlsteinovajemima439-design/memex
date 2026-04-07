@@ -42,7 +42,8 @@ export class RouteHandler {
       { method: 'DELETE', pattern: /^\/wikis\/(?<id>[^/]+)$/,               handler: this.destroyWiki.bind(this) },
       { method: 'PUT',    pattern: /^\/wikis\/(?<id>[^/]+)\/config$/,       handler: this.updateConfig.bind(this) },
       { method: 'POST',   pattern: /^\/wikis\/(?<id>[^/]+)\/chown$/,        handler: this.chownWiki.bind(this) },
-      { method: 'POST',   pattern: /^\/wikis\/(?<id>[^/]+)\/api-key$/,      handler: this.setApiKey.bind(this) },
+      { method: 'POST',   pattern: /^\/auth\/token$/,                        handler: this.setGlobalToken.bind(this) },
+      { method: 'POST',   pattern: /^\/wikis\/(?<id>[^/]+)\/token$/,        handler: this.setWikiToken.bind(this) },
       { method: 'POST',   pattern: /^\/wikis\/(?<id>[^/]+)\/credentials$/,  handler: this.setCredentials.bind(this) },
       { method: 'POST',   pattern: /^\/wikis\/(?<id>[^/]+)\/jobs$/,         handler: this.submitJob.bind(this) },
       { method: 'GET',    pattern: /^\/wikis\/(?<id>[^/]+)\/jobs\/(?<jobId>\d+)$/, handler: this.getJob.bind(this) },
@@ -179,18 +180,36 @@ export class RouteHandler {
 
   // ── Auth ─────────────────────────────────────────────────────────────────
 
-  private async setApiKey(params: Record<string, string>, body: unknown, ctx: RouteContext): Promise<RouteResponse> {
+  private async setGlobalToken(_params: Record<string, string>, body: unknown, _ctx: RouteContext): Promise<RouteResponse> {
+    const b = requireBody(body);
+    const token = b.token as string | undefined;
+    if (!token || typeof token !== 'string') {
+      throw new ValidationError('token (string) is required');
+    }
+    if (!token.startsWith('sk-ant-oat01-')) {
+      throw new ValidationError('Token must be a Claude OAuth token (sk-ant-oat01-...)');
+    }
+
+    this.auth.setGlobalToken(token);
+
+    return { status: 200, body: { ok: true } };
+  }
+
+  private async setWikiToken(params: Record<string, string>, body: unknown, ctx: RouteContext): Promise<RouteResponse> {
     const wikiId = params['id']!;
     this.requireWiki(wikiId, ctx.callerUid);
 
     const b = requireBody(body);
-    const key = b.key as string | undefined;
-    if (!key || typeof key !== 'string') {
-      throw new ValidationError('API key is required');
+    const token = b.token as string | undefined;
+    if (!token || typeof token !== 'string') {
+      throw new ValidationError('token (string) is required');
+    }
+    if (!token.startsWith('sk-ant-oat01-')) {
+      throw new ValidationError('Token must be a Claude OAuth token (sk-ant-oat01-...)');
     }
 
-    this.auth.setApiKey(wikiId, key);
-    this.db.logAudit(wikiId, 'wiki.api_key_set');
+    this.auth.setWikiToken(wikiId, token);
+    this.db.logAudit(wikiId, 'wiki.oauth_token_set');
 
     return { status: 200, body: { ok: true } };
   }

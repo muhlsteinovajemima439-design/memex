@@ -143,8 +143,12 @@ export class MemexClient {
     return this.request<Wiki>('POST', `/wikis/${wikiId}/chown`, { uid });
   }
 
-  setApiKey(wikiId: string, key: string) {
-    return this.request('POST', `/wikis/${wikiId}/api-key`, { key });
+  setGlobalToken(token: string) {
+    return this.request('POST', '/auth/token', { token });
+  }
+
+  setWikiToken(wikiId: string, token: string) {
+    return this.request('POST', `/wikis/${wikiId}/token`, { token });
   }
 
   setCredentials(wikiId: string, credentials: string) {

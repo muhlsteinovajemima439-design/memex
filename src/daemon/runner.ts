@@ -57,6 +57,11 @@ export class ClaudeRunner {
       env['CLAUDE_CONFIG_DIR'] = `${WORKSPACE_MOUNT}/.claude`;
     }
 
+    // Pass through OAuth token if set (from `claude setup-token`)
+    if (credEnv['CLAUDE_CODE_OAUTH_TOKEN']) {
+      env['CLAUDE_CODE_OAUTH_TOKEN'] = credEnv['CLAUDE_CODE_OAUTH_TOKEN'];
+    }
+
     return new Promise<JobResult>((resolve) => {
       const child = spawn(wrapped.command, wrapped.args, {
         env,

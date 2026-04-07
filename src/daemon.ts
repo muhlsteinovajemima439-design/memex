@@ -36,7 +36,7 @@ export async function startDaemon(): Promise<void> {
 
   // ── Components ─────────────────────────────────────────────────────────
   const scaffold = new WikiScaffold(WIKIS_DIR);
-  const auth = new AuthManager(WIKIS_DIR, process.env['ANTHROPIC_API_KEY']);
+  const auth = new AuthManager(WIKIS_DIR);
   const runner = new ClaudeRunner(namespace, auth, db, WIKIS_DIR);
   const queue = new QueueManager(db, runner, AUTO_LINT_INTERVAL);
   const routes = new RouteHandler(db, scaffold, namespace, queue, auth);
