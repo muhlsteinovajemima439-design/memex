@@ -46,7 +46,9 @@
   },
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "binding.gyp",
+    "src/daemon/peercred.c"
   ],
   "dependencies": {
     "better-sqlite3": "^12.8.0",
