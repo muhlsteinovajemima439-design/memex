@@ -1,6 +1,6 @@
 {
   "name": "@wastedcode/memex",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Isolated, queued claude -p runtime for persistent knowledge bases",
   "type": "module",
   "engines": {
